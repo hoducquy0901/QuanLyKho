@@ -31,7 +31,7 @@
 
             <property
                     name="jakarta.persistence.jdbc.password"
-                    value="hoanhao3110"/>
+                    value="123456"/>
 
             <property
                     name="hibernate.dialect"
