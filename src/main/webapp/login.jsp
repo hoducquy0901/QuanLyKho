@@ -1,82 +1,222 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - Quản lý kho</title>
-    <link href="${pageContext.request.contextPath}/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <title>Đăng nhập - Quản Lý Kho</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        html, body {
-            height: 100%;
-        }
+
         body {
-            background: url('${pageContext.request.contextPath}/assets/img/login-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-        }
-        .login-overlay {
+            background: #f4f6f9;
             min-height: 100vh;
-            background: rgba(0, 0, 0, 0.55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 64px;
+        }
+
+        .navbar-brand {
+            font-size: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        /* LOGIN AREA */
+
+        .login-container {
+            min-height: calc(100vh - 64px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        /* LOGIN CARD */
+
         .login-card {
             width: 100%;
-            max-width: 380px;
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            max-width: 430px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.10);
+            padding: 35px;
         }
-        .login-card .card-body {
-            padding: 2.5rem 2rem;
+
+        .login-title {
+            font-weight: 700;
+            margin-bottom: 8px;
         }
-        .login-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #0d6efd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem auto;
+
+        .login-subtitle {
+            color: #6c757d;
+            margin-bottom: 30px;
         }
-        .login-icon svg {
-            width: 28px;
-            height: 28px;
-            fill: #fff;
+
+        /* INPUT */
+
+        .form-label {
+            font-weight: 500;
         }
+
+        .form-control {
+            height: 48px;
+            border-radius: 9px;
+        }
+
+        .form-control:focus {
+            border-color: #212529;
+            box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.12);
+        }
+
+        /* BUTTON */
+
+        .login-btn {
+            height: 48px;
+            border-radius: 9px;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        /* ERROR */
+
+        .error-message {
+            background: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+        }
+
+        /* FOOTER */
+
+        .login-footer {
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 25px;
+        }
+
     </style>
+
 </head>
+
 <body>
 
-<div class="login-overlay">
-    <div class="card login-card">
-        <div class="card-body">
-            <div class="login-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"/></svg>
-            </div>
-            <h4 class="text-center mb-1">WMS</h4>
+<!-- ================= NAVBAR ================= -->
 
-            <% if (request.getAttribute("error") != null) { %>
-            <div class="alert alert-danger py-2" role="alert">
-                <%= request.getAttribute("error") %>
-            </div>
-            <% } %>
+<nav class="navbar navbar-dark bg-dark">
 
-            <form action="${pageContext.request.contextPath}/login" method="post">
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Please enter LoginId" required autofocus>
-                </div>
-                <div class="mb-3">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-        </div>
+    <div class="container-fluid px-4">
+
+        <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/login">
+
+            📦 Quản Lý Kho
+
+        </a>
+
     </div>
+
+</nav>
+
+<!-- ================= LOGIN ================= -->
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <!-- TITLE -->
+
+        <div class="text-center">
+
+            <h2 class="login-title">
+                Đăng nhập </h2>
+
+        </div>
+
+        <!-- ERROR MESSAGE -->
+
+        <%String message =
+                (String) request.getAttribute("message");
+
+            if (message != null) {%>
+
+        <div class="error-message">
+
+            <%= message %>
+
+        </div>
+
+        <%}%>
+
+        <!-- FORM -->
+
+        <form action="<%= request.getContextPath() %>/login" method="post">
+
+            <!-- USERNAME -->
+
+            <div class="mb-3">
+
+                <label class="form-label"> Username </label>
+
+                <input type="text" name="username" class="form-control" placeholder="Nhập username"
+                       autocomplete="username" required>
+
+            </div>
+
+            <!-- PASSWORD -->
+
+            <div class="mb-4">
+
+                <label class="form-label"> Password </label>
+
+                <input type="password" name="password" class="form-control" placeholder="Nhập mật khẩu"
+                       autocomplete="current-password" required>
+
+            </div>
+            <div class="text-end mb-4">
+
+                <a href="<%= request.getContextPath() %>/forgot-password" class="text-decoration-none">
+
+                    Quên mật khẩu?
+
+                </a>
+
+            </div>
+
+            <!-- BUTTON -->
+
+            <button type="submit" class="btn btn-dark login-btn">
+
+                Đăng nhập
+
+            </button>
+
+        </form>
+
+        <!-- FOOTER -->
+
+        <div class="login-footer">
+
+            Hệ thống quản lý kho hàng điện tử
+
+        </div>
+
+    </div>
+
 </div>
 
-<script src="${pageContext.request.contextPath}/assets/bootstrap/js/bootstrap.bundle.js"></script>
 </body>
+
 </html>

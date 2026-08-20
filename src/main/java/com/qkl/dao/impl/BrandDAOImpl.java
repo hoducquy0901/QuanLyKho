@@ -12,7 +12,9 @@ public class BrandDAOImpl implements BrandDAO {
     @Override
     public List<Brand> findAll() {
         EntityManager em = JpaUtil.getEntityManager();
+
         List<Brand> list = em.createQuery("SELECT b FROM Brand b", Brand.class).getResultList();
+
         em.close();
         return list;
     }
@@ -20,7 +22,9 @@ public class BrandDAOImpl implements BrandDAO {
     @Override
     public Brand findById(Integer id) {
         EntityManager em = JpaUtil.getEntityManager();
+
         Brand brand = em.find(Brand.class, id);
+
         em.close();
         return brand;
     }
@@ -28,30 +32,55 @@ public class BrandDAOImpl implements BrandDAO {
     @Override
     public void create(Brand brand) {
         EntityManager em = JpaUtil.getEntityManager();
+
         em.getTransaction().begin();
+
         em.persist(brand);
+
         em.getTransaction().commit();
+
         em.close();
     }
 
     @Override
     public void update(Brand brand) {
         EntityManager em = JpaUtil.getEntityManager();
+
         em.getTransaction().begin();
+
         em.merge(brand);
+
         em.getTransaction().commit();
+
         em.close();
     }
 
     @Override
     public void delete(Integer id) {
         EntityManager em = JpaUtil.getEntityManager();
+
         em.getTransaction().begin();
+
         Brand brand = em.find(Brand.class, id);
+
         if (brand != null) {
             em.remove(brand);
         }
+
         em.getTransaction().commit();
+
         em.close();
+    }
+
+    @Override
+    public boolean hasProducts(Integer brandId) {
+
+        EntityManager em = JpaUtil.getEntityManager();
+
+        Long count = em.createQuery("SELECT COUNT(p) FROM Product p " + "WHERE p.brand.brandId = :brandId", Long.class).setParameter("brandId", brandId).getSingleResult();
+
+        em.close();
+
+        return count > 0;
     }
 }

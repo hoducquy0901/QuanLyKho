@@ -16,4 +16,5 @@ public interface UserDAO {
     void delete(Integer id);
 
     User login(String username, String password);
+    User findByEmail(String email);
 }

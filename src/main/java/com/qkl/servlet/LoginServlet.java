@@ -16,20 +16,15 @@ public class LoginServlet extends HttpServlet {
     UserDAO dao = new UserDAOImpl();
 
     @Override
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.getRequestDispatcher("/login.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
 
     }
 
     @Override
 
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("=== LoginServlet doPost ===");
         String username = request.getParameter("username");
 
@@ -37,24 +32,19 @@ public class LoginServlet extends HttpServlet {
 
         User user = dao.login(username, password);
 
-        if(user != null){
+        if (user != null) {
 
-            HttpSession session =
-                    request.getSession();
+            HttpSession session = request.getSession();
 
             session.setAttribute("user", user);
 
-            response.sendRedirect("dashboard");
+            response.sendRedirect("home");
 
-        }else{
+        } else {
 
-            request.setAttribute(
-                    "message",
-                    "Sai tài khoản hoặc mật khẩu"
-            );
+            request.setAttribute("message", "Sai tài khoản hoặc mật khẩu");
 
-            request.getRequestDispatcher("/login.jsp")
-                    .forward(request,response);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
 
         }
 

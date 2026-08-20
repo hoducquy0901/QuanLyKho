@@ -14,4 +14,6 @@ public interface BrandDAO {
     void update(Brand brand);
 
     void delete(Integer id);
+
+    boolean hasProducts(Integer brandId);
 }

@@ -12,27 +12,30 @@ import java.io.IOException;
 public class AuthFilter implements Filter {
 
     @Override
-    public void doFilter(ServletRequest request,
-                         ServletResponse response,
-                         FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
+
         HttpServletResponse resp = (HttpServletResponse) response;
 
         String uri = req.getRequestURI();
 
         // Các trang được phép truy cập khi chưa đăng nhập
-        if (uri.endsWith("/login")
-                || uri.endsWith("/login.jsp")) {
+        if (uri.endsWith("/login") || uri.endsWith("/login.jsp") || uri.endsWith("/forgot-password") || uri.endsWith("/forgot-password.jsp")) {
+
             chain.doFilter(request, response);
             return;
         }
 
+        // Kiểm tra đăng nhập
         HttpSession session = req.getSession(false);
+
         if (session != null && session.getAttribute("user") != null) {
+
             chain.doFilter(request, response);
+
         } else {
+
             resp.sendRedirect(req.getContextPath() + "/login");
         }
     }

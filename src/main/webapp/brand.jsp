@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.qkl.entity.Category" %>
+<%@ page import="com.qkl.entity.Brand" %>
 <%@ page import="com.qkl.entity.User" %>
 
 <%User currentUser = (User) session.getAttribute("user");
@@ -10,8 +10,8 @@
         return;
     }
 
-    List<Category> list =
-            (List<Category>) request.getAttribute("list");%>
+    List<Brand> list =
+            (List<Brand>) request.getAttribute("list");%>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -22,7 +22,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Quản lý danh mục - Quản Lý Kho</title>
+    <title>Quản lý thương hiệu - Quản Lý Kho</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -38,19 +38,15 @@
 %>
 
 <% if (error != null) { %>
-
 <div class="alert alert-danger mx-3 mt-3">
     <%= error %>
 </div>
-
 <% } %>
 
 <% if (success != null) { %>
-
 <div class="alert alert-success mx-3 mt-3">
     <%= success %>
 </div>
-
 <% } %>
 <!-- NAVBAR -->
 <nav class="navbar navbar-dark bg-dark">
@@ -59,13 +55,14 @@
 
         <a class="navbar-brand fw-bold" href="<%= request.getContextPath() %>/home">
 
-            Trang chủ
+            Trang chủ
 
         </a>
 
         <div class="d-flex align-items-center">
 
             <span class="text-white me-3">
+
                 <strong>
                     <%= currentUser.getFullName() %>
                 </strong>
@@ -98,7 +95,7 @@
         <div>
 
             <h3 class="mb-1">
-                Category </h3>
+                Brand </h3>
 
         </div>
 
@@ -110,9 +107,9 @@
 
             </a>
 
-            <button type="button" class="btn btn-dark " data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addBrandModal">
 
-                Thêm danh mục
+                Thêm thương hiệu
 
             </button>
 
@@ -125,7 +122,7 @@
 
         <div class="card-header bg-white">
 
-            <strong> Danh sách danh mục </strong>
+            <strong> Danh sách thương hiệu </strong>
 
         </div>
 
@@ -141,14 +138,22 @@
 
                     <tr>
 
-                        <th class="text-center" style="width: 100px;">
+                        <th class="text-center" style="width: 80px;">
 
                             STT
 
                         </th>
 
                         <th>
-                            Tên danh mục
+                            Tên thương hiệu
+                        </th>
+
+                        <th>
+                            Quốc gia
+                        </th>
+
+                        <th>
+                            Mô tả
                         </th>
 
                         <th class="text-center" style="width: 220px;">
@@ -167,7 +172,7 @@
 
                         int stt = 1;
 
-                        for (Category category : list) {%>
+                        for (Brand brand : list) {%>
 
                     <tr>
 
@@ -178,9 +183,21 @@
                         <td>
 
                             <strong>
-                                <%= category.getCategoryName() %>
+                                <%= brand.getBrandName() %>
                             </strong>
 
+                        </td>
+
+                        <td>
+                            <%= brand.getCountry() != null
+                                    ? brand.getCountry()
+                                    : "" %>
+                        </td>
+
+                        <td>
+                            <%= brand.getDescription() != null
+                                    ? brand.getDescription()
+                                    : "" %>
                         </td>
 
                         <td class="text-center">
@@ -188,7 +205,7 @@
                             <!-- SỬA -->
 
                             <button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="modal"
-                                    data-bs-target="#editCategoryModal<%= category.getCategoryId() %>">
+                                    data-bs-target="#editBrandModal<%= brand.getBrandId() %>">
 
                                 Sửa
 
@@ -196,15 +213,14 @@
 
                             <!-- XÓA -->
 
-                            <form method="post" action="<%= request.getContextPath() %>/category"
-                                  style="display: inline;">
+                            <form method="post" action="<%= request.getContextPath() %>/brand" style="display: inline;">
 
                                 <input type="hidden" name="action" value="delete">
 
-                                <input type="hidden" name="categoryId" value="<%= category.getCategoryId() %>">
+                                <input type="hidden" name="brandId" value="<%= brand.getBrandId() %>">
 
                                 <button type="submit" class="btn btn-outline-light text-dark"
-                                        onclick="return confirm('Bạn có chắc muốn xóa danh mục này không?');">
+                                        onclick="return confirm('Bạn có chắc muốn xóa thương hiệu này không?');">
 
                                     Xóa
 
@@ -218,7 +234,7 @@
 
                     <!-- EDIT MODAL -->
 
-                    <div class="modal fade" id="editCategoryModal<%= category.getCategoryId() %>" tabindex="-1">
+                    <div class="modal fade" id="editBrandModal<%= brand.getBrandId() %>" tabindex="-1">
 
                         <div class="modal-dialog">
 
@@ -227,26 +243,47 @@
                                 <div class="modal-header">
 
                                     <h5 class="modal-title">
-                                        Sửa danh mục </h5>
+                                        Sửa thương hiệu </h5>
 
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
                                 </div>
 
-                                <form method="post" action="<%= request.getContextPath() %>/category">
+                                <form method="post" action="<%= request.getContextPath() %>/brand">
 
                                     <div class="modal-body">
 
                                         <input type="hidden" name="action" value="update">
 
-                                        <input type="hidden" name="categoryId" value="<%= category.getCategoryId() %>">
+                                        <input type="hidden" name="brandId" value="<%= brand.getBrandId() %>">
 
                                         <div class="mb-3">
 
-                                            <label class="form-label"> Tên danh mục </label>
+                                            <label class="form-label"> Tên thương hiệu </label>
 
-                                            <input type="text" name="categoryName" class="form-control"
-                                                   value="<%= category.getCategoryName() %>" required>
+                                            <input type="text" name="brandName" class="form-control"
+                                                   value="<%= brand.getBrandName() %>" required>
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label"> Quốc gia </label>
+
+                                            <input type="text" name="country" class="form-control" value="<%= brand.getCountry() != null
+                                                           ? brand.getCountry()
+                                                           : "" %>">
+
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label class="form-label"> Mô tả </label>
+
+                                            <textarea name="description" class="form-control"
+                                                      rows="3"><%= brand.getDescription() != null
+                                                    ? brand.getDescription()
+                                                    : "" %></textarea>
 
                                         </div>
 
@@ -282,11 +319,11 @@
 
                     <tr>
 
-                        <td colspan="3" class="text-center
+                        <td colspan="5" class="text-center
                                    text-muted
                                    py-4">
 
-                            Chưa có danh mục nào.
+                            Chưa có thương hiệu nào.
 
                         </td>
 
@@ -306,9 +343,9 @@
 
 </div>
 
-<!-- ADD CATEGORY MODAL -->
+<!-- ADD BRAND MODAL -->
 
-<div class="modal fade" id="addCategoryModal" tabindex="-1">
+<div class="modal fade" id="addBrandModal" tabindex="-1">
 
     <div class="modal-dialog">
 
@@ -317,13 +354,13 @@
             <div class="modal-header">
 
                 <h5 class="modal-title">
-                    Thêm danh mục </h5>
+                    Thêm thương hiệu </h5>
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 
             </div>
 
-            <form method="post" action="<%= request.getContextPath() %>/category">
+            <form method="post" action="<%= request.getContextPath() %>/brand">
 
                 <div class="modal-body">
 
@@ -331,10 +368,26 @@
 
                     <div class="mb-3">
 
-                        <label class="form-label"> Tên danh mục </label>
+                        <label class="form-label"> Tên thương hiệu </label>
 
-                        <input type="text" name="categoryName" class="form-control" placeholder="Nhập tên danh mục"
+                        <input type="text" name="brandName" class="form-control" placeholder="Nhập tên thương hiệu"
                                required>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label"> Quốc gia </label>
+
+                        <input type="text" name="country" class="form-control" placeholder="Nhập quốc gia">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label"> Mô tả </label>
+
+                        <textarea name="description" class="form-control" rows="3" placeholder="Nhập mô tả"></textarea>
 
                     </div>
 
@@ -350,7 +403,7 @@
 
                     <button type="submit" class="btn btn-primary">
 
-                        Thêm danh mục
+                        Thêm thương hiệu
 
                     </button>
 

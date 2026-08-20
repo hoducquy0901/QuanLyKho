@@ -14,4 +14,6 @@ public interface CategoryDAO {
     void update(Category category);
 
     void delete(Integer id);
+
+    boolean hasProducts(Integer categoryId);
 }

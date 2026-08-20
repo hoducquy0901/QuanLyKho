@@ -94,5 +94,31 @@ public class UserDAOImpl implements UserDAO {
             em.close();
         }
     }
+    @Override
+    public User findByEmail(String email) {
+
+        EntityManager em = JpaUtil.getEntityManager();
+
+        try {
+
+            String jpql =
+                    "SELECT u FROM User u WHERE u.email = :email";
+
+            List<User> list =
+                    em.createQuery(jpql, User.class)
+                            .setParameter("email", email)
+                            .getResultList();
+
+            if (!list.isEmpty()) {
+                return list.get(0);
+            }
+
+            return null;
+
+        } finally {
+
+            em.close();
+        }
+    }
 
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @WebServlet("/category")
 public class CategoryServlet extends HttpServlet {
     private CategoryDAO dao = new CategoryDAOImpl();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Category> list = dao.findAll();
@@ -35,9 +36,20 @@ public class CategoryServlet extends HttpServlet {
             c.setCategoryName(request.getParameter("categoryName"));
             dao.update(c);
         } else if ("delete".equals(action)) {
+
             Integer id = Integer.parseInt(request.getParameter("categoryId"));
-            dao.delete(id);
+
+            if (dao.hasProducts(id)) {
+
+                request.getSession().setAttribute("error", "Không thể xóa danh mục vì đang có sản phẩm sử dụng danh mục này!");
+
+            } else {
+
+                dao.delete(id);
+
+                request.getSession().setAttribute("success", "Xóa danh mục thành công!");
+            }
+            response.sendRedirect("category");
         }
-        response.sendRedirect("category");
     }
 }

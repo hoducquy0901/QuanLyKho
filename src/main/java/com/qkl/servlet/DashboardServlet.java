@@ -12,12 +12,9 @@ import java.io.IOException;
 public class DashboardServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.getRequestDispatcher("/dashboard.jsp")
-                .forward(request, response);
+        request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
 
     }
 }
